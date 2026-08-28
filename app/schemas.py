@@ -1,8 +1,7 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from datetime import date
-from typing import Optional
+from typing import Optional, List
 
-# Patient schemas
 class PatientBase(BaseModel):
     full_name: str
     birth_date: date
@@ -11,30 +10,27 @@ class PatientBase(BaseModel):
 class PatientCreate(PatientBase):
     pass
 
-class PatientRead(PatientBase):
+class Patient(PatientBase):
     id: int
-    created_at: date
+    model_config = ConfigDict(from_attributes=True)
 
-    class Config:
-        from_attributes = True
+class PatientWithVaccinations(Patient):
+    vaccinations: List["Vaccination"] = []
 
-# Vaccination schemas
 class VaccinationBase(BaseModel):
+    patient_id: int
     vaccine_name: str
     dose_number: int
     vaccination_date: date
     next_dose_date: Optional[date] = None
 
 class VaccinationCreate(VaccinationBase):
-    patient_id: int
+    pass
 
-class VaccinationRead(VaccinationBase):
+class Vaccination(VaccinationBase):
     id: int
-    patient_id: int
+    model_config = ConfigDict(from_attributes=True)
 
-    class Config:
-        from_attributes = True
-
-# For patient details with history
-class PatientWithVaccinations(PatientRead):
-    vaccinations: list[VaccinationRead] = []
+# Алиасы для роутеров (можно использовать те же имена)
+PatientRead = Patient
+VaccinationRead = Vaccination

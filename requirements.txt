@@ -7,3 +7,5 @@ kafka-python
 python-dotenv
 pytest
 httpx
+redis>=4.5.0
+pydantic-settings>=2.0.0

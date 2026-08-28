@@ -1,4 +1,6 @@
-from sqlalchemy import Column, Integer, String, Date, ForeignKey
+#models.py
+
+from sqlalchemy import Column, Integer, String, Date, ForeignKey, func
 from sqlalchemy.orm import relationship
 from app.database import Base
 
@@ -8,7 +10,7 @@ class Patient(Base):
     full_name = Column(String, nullable=False)
     birth_date = Column(Date, nullable=False)
     phone = Column(String, nullable=True)
-    created_at = Column(Date, server_default="CURRENT_DATE")
+    created_at = Column(Date, server_default=func.current_date())
     vaccinations = relationship("Vaccination", back_populates="patient")
 
 class Vaccination(Base):
