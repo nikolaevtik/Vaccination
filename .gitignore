@@ -1,14 +1,95 @@
-# Created by venv; see https://docs.python.org/3/library/venv.html
-venv/
+# Python
 __pycache__/
 *.pyc
-.env
-.DS_Store
-*.log
-.pytest_cache/
-.mypy_cache/
-.coverage
-htmlcov/
+*.pyo
+*.pyd
+*.so
+*.dll
+*.dylib
+*.egg
+*.egg-info/
 dist/
 build/
-*.egg-info/
+*.whl
+*.tar.gz
+
+# Виртуальное окружение (ВАЖНО для Windows!)
+venv/
+env/
+ENV/
+.venv/
+venv-win/
+.venv-win/
+envs/
+.virtualenv/
+Lib/           # ← ДОБАВИТЬ!
+Scripts/       # ← ДОБАВИТЬ!
+Include/       # ← ДОБАВИТЬ!
+pip-wheel-metadata/
+pip-log.txt
+pip-selfcheck.json
+
+# IDE и редакторы
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.iml
+.vim/
+.vs/
+
+# Тесты и отладка
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+*.cover
+.hypothesis/
+.coverage.*
+coverage.xml
+*.log
+
+# Переменные окружения
+.env
+.env.*
+!.env.example
+*.local
+*.secret
+
+# Docker
+*.tar
+*.pid
+*.lock
+*.tmp
+
+# Логи и временные файлы
+logs/
+*.log
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Документация
+docs/_build/
+site/
+*.ipynb_checkpoints/
+
+# Файлы проекта
+*.bak
+*.orig
+*.rej
+
+# npm
+node_modules/
+package-lock.json
+yarn.lock
+
+# Системные файлы
+Thumbs.db
+ehthumbs.db
+Desktop.ini

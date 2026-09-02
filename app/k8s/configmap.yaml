@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: vaccination
+data:
+  # Несекретные переменные окружения
+  KAFKA_TOPIC_VACCINATIONS: "vaccination_events"
+  REDIS_HOST: "redis-service"
+  REDIS_PORT: "6379"
+  POSTGRES_HOST: "postgres-service"
+  POSTGRES_DB: "vaccination_db"
+  POSTGRES_USER: "user"

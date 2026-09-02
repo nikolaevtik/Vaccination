@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vaccination-app
+  namespace: vaccination
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vaccination-app
+  template:
+    metadata:
+      labels:
+        app: vaccination-app
+    spec:
+      containers:
+      - name: app
+        image: vaccination-app:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DATABASE_URL
+          value: "postgresql+asyncpg://user:$(POSTGRES_PASSWORD)@postgres-service:5432/vaccination_db"
+        - name: REDIS_URL
+          value: "redis://redis-service:6379/0"
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: POSTGRES_PASSWORD
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+  namespace: vaccination
+spec:
+  type: NodePort
+  selector:
+    app: vaccination-app
+  ports:
+  - port: 8000
+    targetPort: 8000
+    nodePort: 30080
