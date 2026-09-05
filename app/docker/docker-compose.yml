@@ -1,6 +1,7 @@
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -9,27 +10,27 @@ services:
     networks:
       - app-network
 
-  # kafka:
-  #   image: apache/kafka:latest
-  #   depends_on:
-  #     - zookeeper
-  #   environment:
-  #     KAFKA_BROKER_ID: 1
-  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-  #     KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-  #     KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-  #     KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-  #     KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-  #     KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
-  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
-  #     KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-  #   ports:
-  #     - "9092:9092"
-  #   networks:
-  #     - app-network
+  kafka:
+    image: confluentinc/cp-kafka:6.2.0
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    volumes:
+      - ./kafka-config/server.properties:/etc/kafka/server.properties:ro
+      - kafka_data:/var/lib/kafka/data
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    networks:
+      - app-network
 
   postgres:
     image: postgres:15
+    container_name: postgres
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
@@ -48,6 +49,7 @@ services:
 
   redis:
     image: redis:7
+    container_name: redis
     ports:
       - "6379:6379"
     networks:
@@ -57,17 +59,18 @@ services:
     build:
       context: ../..
       dockerfile: app/docker/Dockerfile
+    container_name: vaccination-app
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_started
-      # kafka:
-      #   condition: service_started
+      kafka:
+        condition: service_started
     environment:
       DATABASE_URL: postgresql+asyncpg://user:pass@postgres:5432/vaccination_db
       REDIS_URL: redis://redis:6379/0
-      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      KAFKA_BOOTSTRAP_SERVERS: localhost:9092
       KAFKA_TOPIC_VACCINATIONS: vaccination_events
     ports:
       - "8000:8000"
@@ -78,6 +81,7 @@ services:
 
 volumes:
   postgres_data:
+  kafka_data:
 
 networks:
   app-network:
