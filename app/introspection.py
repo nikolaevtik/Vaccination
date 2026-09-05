@@ -3,11 +3,11 @@ import sys
 from datetime import datetime
 from typing import List, Optional
 
-
 # ========== ПРИМЕР 1: ИССЛЕДУЕМ ФУНКЦИЮ ==========
 print("=" * 60)
 print("ПРИМЕР 1: Информация о функции")
 print("=" * 60)
+
 
 def example_function(a: int, b: str = "hello", *args, **kwargs) -> List[str]:
     """
@@ -15,6 +15,7 @@ def example_function(a: int, b: str = "hello", *args, **kwargs) -> List[str]:
     Она возвращает список строк.
     """
     return [str(a), b, *args]
+
 
 # Получаем сигнатуру функции
 sig = inspect.signature(example_function)
@@ -28,7 +29,9 @@ for name, param in sig.parameters.items():
 # Докстринг
 print(f"Докстринг: {inspect.getdoc(example_function)}")
 print(f"Исходный код:\n{inspect.getsource(example_function)}")
-print(f"Файл и строка: {inspect.getfile(example_function)} строка {inspect.getsourcelines(example_function)[1]}")
+print(
+    f"Файл и строка: {inspect.getfile(example_function)} строка {inspect.getsourcelines(example_function)[1]}"
+)
 
 
 # ========== ПРИМЕР 2: ИССЛЕДУЕМ КЛАСС ==========
@@ -36,25 +39,28 @@ print("\n" + "=" * 60)
 print("ПРИМЕР 2: Информация о классе")
 print("=" * 60)
 
+
 class User:
     """Класс пользователя"""
+
     default_role = "guest"
-    
+
     def __init__(self, name: str, age: int = 18):
         self.name = name
         self.age = age
-    
+
     def greet(self) -> str:
         """Приветствие"""
         return f"Hello, {self.name}"
-    
+
     @property
     def is_adult(self) -> bool:
         return self.age >= 18
-    
+
     @classmethod
     def from_dict(cls, data: dict):
         return cls(data["name"], data["age"])
+
 
 # Все методы класса
 print(f"Методы класса: {inspect.getmembers(User, inspect.ismethod)}")
@@ -76,20 +82,26 @@ print("\n" + "=" * 60)
 print("ПРИМЕР 3: Стек вызовов (кто вызвал функцию)")
 print("=" * 60)
 
+
 def get_caller_info():
     """Возвращает информацию о том, кто вызвал эту функцию"""
     # Текущий фрейм
     frame = inspect.currentframe()
-    print(f"Текущий файл: {inspect.getframeinfo(frame).filename}, строка {inspect.getframeinfo(frame).lineno}")
-    
+    print(
+        f"Текущий файл: {inspect.getframeinfo(frame).filename}, строка {inspect.getframeinfo(frame).lineno}"
+    )
+
     # Фрейм вызывающего
     caller_frame = frame.f_back
     if caller_frame:
         info = inspect.getframeinfo(caller_frame)
-        print(f"Вызвано из: {info.filename}, функция {info.function}, строка {info.lineno}")
+        print(
+            f"Вызвано из: {info.filename}, функция {info.function}, строка {info.lineno}"
+        )
         print(f"Локальные переменные вызывающего: {caller_frame.f_locals}")
-    
+
     return "OK"
+
 
 def wrapper_function():
     """Функция-обёртка, которая вызывает get_caller_info"""
@@ -97,6 +109,7 @@ def wrapper_function():
     y = "test"
     result = get_caller_info()
     print(f"Результат: {result}")
+
 
 wrapper_function()
 
@@ -106,14 +119,16 @@ print("\n" + "=" * 60)
 print("ПРИМЕР 4: Проверка типов объектов")
 print("=" * 60)
 
+
 class MyClass:
     pass
+
 
 obj = MyClass()
 func = lambda x: x * 2
 
-print(f"isbuiltin(str): {inspect.isbuiltin(str)}")      # встроенные функции/методы
-print(f"isroutine(lambda): {inspect.isroutine(func)}")   # функция/метод/лямбда
+print(f"isbuiltin(str): {inspect.isbuiltin(str)}")  # встроенные функции/методы
+print(f"isroutine(lambda): {inspect.isroutine(func)}")  # функция/метод/лямбда
 print(f"ismodule(sys): {inspect.ismodule(sys)}")
 print(f"isclass(MyClass): {inspect.isclass(MyClass)}")
 print(f"ismethod(obj.__init__): {inspect.ismethod(obj.__init__)}")
@@ -126,17 +141,19 @@ print("\n" + "=" * 60)
 print("ПРИМЕР 5: Получение аргументов функции")
 print("=" * 60)
 
+
 def complex_func(a, b=10, *args, c=20, **kwargs):
     pass
+
 
 # Получаем аргументы
 args_spec = inspect.getfullargspec(complex_func)
 print(f"args: {args_spec.args}")
 print(f"defaults: {args_spec.defaults}")
-print(f"varargs: {args_spec.varargs}")      # *args
-print(f"varkw: {args_spec.varkw}")           # **kwargs
-print(f"kwonlyargs: {args_spec.kwonlyargs}") # аргументы после *
-print(f"kwonlydefaults: {args_spec.kwonlydefaults}") # c=20
+print(f"varargs: {args_spec.varargs}")  # *args
+print(f"varkw: {args_spec.varkw}")  # **kwargs
+print(f"kwonlyargs: {args_spec.kwonlyargs}")  # аргументы после *
+print(f"kwonlydefaults: {args_spec.kwonlydefaults}")  # c=20
 
 
 # ========== ПРИМЕР 6: КЛАССЫ С ДАТА-КЛАССАМИ ==========
@@ -146,11 +163,13 @@ print("=" * 60)
 
 from dataclasses import dataclass
 
+
 @dataclass
 class Person:
     name: str
     age: int = 0
     email: Optional[str] = None
+
 
 # Все поля с их типами и значениями по умолчанию
 print(f"Поля: {inspect.get_annotations(Person)}")
@@ -169,17 +188,19 @@ print("\n" + "=" * 60)
 print("ПРИМЕР 7: Получение документации")
 print("=" * 60)
 
+
 def test_doc(a, b):
     """Складывает a и b.
-    
+
     Аргументы:
         a: первое число
         b: второе число
-    
+
     Возвращает:
         сумму a и b
     """
     return a + b
+
 
 print(f"Докстринг: {inspect.getdoc(test_doc)}")
 print(f"Комментарии: {inspect.getcomments(test_doc)}")  # Комментарии перед функцией

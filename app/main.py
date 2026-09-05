@@ -24,9 +24,11 @@ async def lifespan(app: FastAPI):
     # При завершении
     await shutdown_kafka_producer()
 
+
 app = FastAPI(title="Vaccination Tracker", lifespan=lifespan)
 app.include_router(patients.router)
 app.include_router(vaccinations.router)
+
 
 @app.get("/")
 async def root():

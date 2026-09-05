@@ -9,10 +9,10 @@ from app import crud, schemas
 
 router = APIRouter(prefix="/vaccinations", tags=["vaccinations"])
 
+
 @router.post("/", response_model=schemas.VaccinationRead)
 async def create_vaccination(
-    vacc: schemas.VaccinationCreate,
-    db: AsyncSession = Depends(get_db)
+    vacc: schemas.VaccinationCreate, db: AsyncSession = Depends(get_db)
 ):
     # Проверка существования пациента
     patient = await crud.get_patient(db, vacc.patient_id)
@@ -22,8 +22,5 @@ async def create_vaccination(
 
 
 @router.get("/patient/{patient_id}", response_model=list[schemas.VaccinationRead])
-async def get_patient_vaccinations(
-    patient_id: int,
-    db: AsyncSession = Depends(get_db)
-):
+async def get_patient_vaccinations(patient_id: int, db: AsyncSession = Depends(get_db)):
     return await crud.get_vaccinations_by_patient(db, patient_id)
