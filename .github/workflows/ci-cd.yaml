@@ -65,7 +65,7 @@ jobs:
         REDIS_URL: redis://localhost:6379/0
         KAFKA_BOOTSTRAP_SERVERS: localhost:9092
       run: |
-        python -m pytest app/tests/ -v --tb=short
+        PYTHONPATH=. python -m pytest app/tests/ -v --tb=short
     
     - name: Run linting
       run: |
