@@ -75,11 +75,8 @@ async def get_patients_cached(
             for p in patients
         ]
         
-        await redis.setex(
-            cache_key, 
-            60,  # TTL 60 секунд
-            json.dumps(serialized, default=str)
-        )
+        await redis.set(cache_key, json.dumps(serialized, default=str), ex=60)
+        
     except Exception as e:
         print(f"Redis set error: {e}")
     
