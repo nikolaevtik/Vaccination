@@ -19,3 +19,12 @@ if l1==l3:
     print("true")
 else:
     print("false")
+
+        
+for i in range(2):
+    for j in range(1, 6):
+        if j % 2 == 1:
+            continue
+        if j == 3:
+            break
+        print(i, j)
