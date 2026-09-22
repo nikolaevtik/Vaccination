@@ -5,7 +5,7 @@ from httpx import AsyncClient
 
 pytestmark = pytest.mark.asyncio
 
-
+@pytest.mark.slow
 async def test_create_vaccination(client: AsyncClient):
     patient_resp = await client.post(
         "/patients/",  # <-- добавил слеш

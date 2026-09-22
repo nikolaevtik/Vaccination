@@ -5,7 +5,7 @@ from httpx import AsyncClient
 
 pytestmark = pytest.mark.asyncio
 
-
+@pytest.mark.slow
 async def test_create_patient(client: AsyncClient):
     response = await client.post(
         "/patients/",  # <-- добавил слеш
@@ -17,7 +17,7 @@ async def test_create_patient(client: AsyncClient):
     assert data["birth_date"] == "1990-01-01"
     assert "id" in data
 
-
+@pytest.mark.slow
 async def test_get_patients(client: AsyncClient):
     await client.post(
         "/patients/", json={"full_name": "Пациент 1", "birth_date": "1990-01-01"}
