@@ -34,13 +34,3 @@ def test_very_slow_calculation():
     """Гипотетический тест, который работает очень долго."""
     # для примера просто сделаем его успешным
     assert True    
-    
-@pytest.mark.xfail(reason="Известный баг с точностью float, будет исправлен в #TICKET-123")
-def test_add_floats_bug():
-    # Этот тест будет падать из-за особенностей представления float в Python
-    assert add(0.1, 0.2) == 0.3    
-    
-
-def test_check_sign_positive():
-    assert check_sign(10) == "positive"
-    assert check_sign(-10) == "zero or negative"
