@@ -1,6 +1,11 @@
 # src/calculator.py
 
-
+def check_sign(number):
+    if number > 0:
+        return "positive"
+    else:
+        return "zero or negative"
+    
 def add(a, b):
     """
     Эта функция принимает два числа и возвращает их сумму.

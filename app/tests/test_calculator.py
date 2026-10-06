@@ -1,7 +1,8 @@
 # tests/test_calculator.py
 import pytest
 # 1. Импортируем нашу функцию из папки src
-from app.src.calculator import add, divide
+from app.src.calculator import add, divide, check_sign
+
 
 # 2. Пишем тестовую функцию, соблюдая правило именования
 @pytest.mark.smoke
@@ -38,3 +39,8 @@ def test_very_slow_calculation():
 def test_add_floats_bug():
     # Этот тест будет падать из-за особенностей представления float в Python
     assert add(0.1, 0.2) == 0.3    
+    
+
+def test_check_sign_positive():
+    assert check_sign(10) == "positive"
+    assert check_sign(-10) == "zero or negative"
