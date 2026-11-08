@@ -34,3 +34,8 @@ def test_very_slow_calculation():
     """Гипотетический тест, который работает очень долго."""
     # для примера просто сделаем его успешным
     assert True    
+    
+@pytest.mark.smoke
+def test_check_sign():
+    assert  check_sign(10) == "positive"
+    assert  check_sign(-10) == "zero or negative"  
